@@ -43,7 +43,8 @@ public class JavaNIOBlockingMultiServer implements Runnable{
         log.info("Request : {}", requestBody);
         Thread.sleep(10);
 
-        var responseByteBuffer = ByteBuffer.wrap("This is server".getBytes());
+        String response = "This is server";
+        var responseByteBuffer = ByteBuffer.wrap(response.getBytes());
         clientSocket.write(responseByteBuffer);
         clientSocket.close();
     }

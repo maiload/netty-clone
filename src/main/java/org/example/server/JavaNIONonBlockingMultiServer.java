@@ -10,12 +10,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class JavaNIONonBlockingMultiServer implements Runnable{
     private final Logger log = LoggerFactory.getLogger(JavaNIONonBlockingMultiServer.class);
-    private int sleepCount;
     @Override
     public void run() {
         log.info("Start JavaNIONonBlockingMultiServer");
@@ -27,11 +24,9 @@ public class JavaNIONonBlockingMultiServer implements Runnable{
                 var clientSocket = serverSocket.accept();
                 if(clientSocket == null){
                     Thread.sleep(10);
-                    sleepCount++;
                     continue;
                 }
 
-                log.warn("SleepCount : {}", sleepCount);
                 CompletableFuture.runAsync(() -> {
                     try {
                         handleRequest(clientSocket);
@@ -55,7 +50,8 @@ public class JavaNIONonBlockingMultiServer implements Runnable{
         log.info("Request : {}", requestBody);
         Thread.sleep(10);
 
-        var responseByteBuffer = ByteBuffer.wrap("This is server".getBytes());
+        String response = "This is server";
+        var responseByteBuffer = ByteBuffer.wrap(response.getBytes());
         clientSocket.write(responseByteBuffer);
         clientSocket.close();
     }
