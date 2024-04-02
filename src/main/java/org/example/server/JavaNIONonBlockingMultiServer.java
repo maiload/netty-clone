@@ -1,4 +1,8 @@
 package org.example.server;
 
-public class JavaNIONonBlockingMultiServer {
+public class JavaNIONonBlockingMultiServer implements Runnable{
+    @Override
+    public void run() {
+
+    }
 }

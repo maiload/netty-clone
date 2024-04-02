@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class JavaIOMultiClient{
     private static final Logger log = LoggerFactory.getLogger(JavaIOMultiClient.class);
     private static final ExecutorService executorService = Executors.newFixedThreadPool(50);
+    private static AtomicInteger errorCount = new AtomicInteger(0);
 
     public static void run() {
         log.info("Start Client");
@@ -21,7 +23,8 @@ public class JavaIOMultiClient{
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         var start = System.currentTimeMillis();
 
-        for(int i = 0; i < 1000; i++){
+        var amount = 1000;
+        for(int i = 0; i < amount; i++){
             var future = CompletableFuture.runAsync(() -> {
                 try(Socket socket = new Socket()){
                     socket.connect(new InetSocketAddress("localhost", 8080));
@@ -36,7 +39,7 @@ public class JavaIOMultiClient{
                     in.read(responseBytes);
                     log.info("Response : {}", new String(responseBytes).trim());
                 }catch (Exception e){
-                    log.error("ERROR", e);
+                    log.error("ERROR ({})", errorCount.incrementAndGet(), e);
                 }
             }, executorService);
 
@@ -47,7 +50,7 @@ public class JavaIOMultiClient{
         executorService.shutdown();
         log.info("End Client");
         var end = System.currentTimeMillis();
-        log.info("Duration : {}", (end - start) / 1000.0);
+        log.info("Duration : {} sec, Success : {} %", (end - start) / 1000.0, (amount - errorCount.get()) * 100.0 / amount);
     }
 
 }
