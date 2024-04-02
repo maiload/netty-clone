@@ -9,9 +9,10 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 
-public class JavaNIOBlockingServer implements Runnable{
-    private final Logger log = LoggerFactory.getLogger(JavaNIOBlockingServer.class);
+public class JavaNIOBlockingMultiServer implements Runnable{
+    private final Logger log = LoggerFactory.getLogger(JavaNIOBlockingMultiServer.class);
 
     public void run(){
         log.info("Start JavaNIOBlockingServer");
@@ -20,7 +21,13 @@ public class JavaNIOBlockingServer implements Runnable{
 
             while(true){
                 var clientSocket = serverSocket.accept();
-                handleRequest(clientSocket);
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        handleRequest(clientSocket);
+                    } catch (IOException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
 
         }catch (Exception e){
