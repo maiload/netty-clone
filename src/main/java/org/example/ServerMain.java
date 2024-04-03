@@ -17,7 +17,7 @@ public class ServerMain {
 //        new Thread(new JavaNIONonBlockingServer()).start();
 //        new Thread(new JavaNIONonBlockingMultiServer()).start();
 
-        List<EventLoop> eventLoopGroup = List.of(new EventLoop(8080), new EventLoop(8080));
+        List<EventLoop> eventLoopGroup = List.of(new EventLoop(8080));
         eventLoopGroup.forEach(EventLoop::run);
     }
 }

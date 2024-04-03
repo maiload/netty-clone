@@ -23,7 +23,7 @@ public class JavaIOMultiClient{
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         var start = System.currentTimeMillis();
 
-        var amount = 50;
+        var amount = 100;
         for(int i = 0; i < amount; i++){
             var future = CompletableFuture.runAsync(() -> {
                 try(Socket socket = new Socket()){

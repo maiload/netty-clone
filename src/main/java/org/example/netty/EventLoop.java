@@ -38,7 +38,6 @@ public class EventLoop{
 
                     dispatch(key);
                 }
-
             }
         });
     }

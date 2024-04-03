@@ -25,8 +25,8 @@ public class Acceptor implements EventHandler{
         SocketChannel clientChannel = ((ServerSocketChannel) key.channel()).accept();
         clientChannel.configureBlocking(false);
 
-        clientChannel.register(selector, SelectionKey.OP_READ).attach(tcpHandler);
-//        clientChannel.register(selector, SelectionKey.OP_READ).attach(httpHandler);
+//        clientChannel.register(selector, SelectionKey.OP_READ).attach(tcpHandler);
+        clientChannel.register(selector, SelectionKey.OP_READ).attach(httpHandler);
     }
 
 }
